@@ -13,4 +13,4 @@ RUN pip install gunicorn
 RUN apk del build-dependencies
 
 EXPOSE 8000
-CMD ["gunicorn", "-b 0.0.0.0", "-w 2", "hello:app"]
+CMD ["gunicorn", "-b 0.0.0.0", "-w 2", "run:app"]
