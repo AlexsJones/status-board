@@ -1,0 +1,63 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>{{ title }}</title>
+
+    <meta name="viewport" content="user-scalable=no, width=device-width">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/octicons/octicons.css">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400' rel='stylesheet' type='text/css'>
+</head>
+<body>
+
+<h1>{{ title }}</h1>
+
+{% for task in tasks %}
+<div class="clearfix">
+<p class="status" data-addr="/{{ task.id }}"><span class="icon mega-octicon octicon-hourglass"></span><span class="text">...</span>
+<span class="response text" style=font-size:20px;"></span>
+</p>
+<p class="title">{{ task.title }}</p>
+</div>
+{% endfor %}
+
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script>!window.jQuery && document.write('<script src="/static/js/jquery-1.10.2.min.js"><\/script>')</script>
+<script type="text/javascript">
+$(function() {
+    $(".status").each(function() {
+        var addr = $(this).attr("data-addr");
+        var elem = $(this);
+
+        $.ajax(addr).done(function(data) {
+            var json = $.parseJSON(data);
+            elem.find(".icon").removeClass("octicon-hourglass");
+            if(json['status'] == 'true') {
+                elem.addClass("up");
+                elem.find(".icon").addClass("octicon-check");
+                elem.find(".text").text("Up");
+            }
+            else {
+                elem.addClass("down");
+                elem.find(".icon").addClass("octicon-x");
+                elem.find(".text").text("Down");
+            }
+            var target =  elem.find(".response");
+            target.text(json['time']);
+
+        }).fail(function() {
+            // TODO: should have another state?
+            elem.addClass("down");
+            elem.find(".icon").addClass("octicon-x");
+            elem.find(".text").text("Down");
+        })
+    });
+});
+</script>
+</footer>
+
+</body>
+</html>
