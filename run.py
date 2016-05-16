@@ -1,8 +1,8 @@
 import json
-import requests
 import subprocess
 from time import time
 
+import requests
 from flask import Flask
 from flask import render_template
 
@@ -19,7 +19,7 @@ def shell_handler(command, **kwargs):
 def http_handler(address, **kwargs):
     s = time()
     try:
-        r = requests.get(address)
+        r = requests.get(address, timeout=3.000)
     except requests.exceptions.RequestException:
         t = format((time() - s) * 1000, ".1f")
         return json.dumps(False), t
@@ -51,5 +51,6 @@ def status(task_id):
     j, t = get_handler[task['type']](**task)
     return json.dumps({"status": j, "time": "%sms" % str(t)})
 
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=False, host='0.0.0.0', threaded=True)
