@@ -52,6 +52,4 @@ def status(task_id):
     return json.dumps({"status": j, "time": "%sms" % str(t)})
 
 if __name__ == '__main__':
-    app.debug = True
-    app.run()
-    #app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')
