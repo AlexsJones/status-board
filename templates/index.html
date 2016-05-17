@@ -2,30 +2,91 @@
 <html class="no-js" lang="en">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ title }}</title>
-
     <meta name="viewport" content="user-scalable=no, width=device-width">
-    <link rel="stylesheet" href="/static/css/style.css">
-    <link rel="stylesheet" href="/static/octicons/octicons.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400' rel='stylesheet' type='text/css'>
+
 </head>
 <body>
+<style>
+@-webkit-viewport { width: device-width; }
+@-moz-viewport    { width: device-width; }
+@-ms-viewport     { width: device-width; }
+@-o-viewport      { width: device-width; }
+@viewport         { width: device-width; }
+.status {
+    background-color: rgba(100, 100, 100, 0.2);
+    width: 100%;
+    height: 100%;
+    margin-right: 24px;
+    padding: 4px 16px;
+    font-size: 15px;
+    float: left;
+    border-right: 6px solid rgba(120, 120, 120, 0.75);
+    color: rgb(120, 120, 120);
+}
 
-<h1>{{ title }}</h1>
+.status .mega-octicon {
+    margin-right: 6px;
+}
+    .status.up {
+    background-color: rgba(130, 183, 39, 0.2);
+    color: rgb(100, 183, 20);
+    border-color: rgba(100, 183, 20, 0.75);
+}
+.status.down {
+    background-color: rgba(255, 93, 55, 0.2);
+    color: rgb(255, 93, 55);
+    border-color: rgba(255, 93, 55, 0.8);
+}
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+</style>
 
-{% for task in tasks %}
-<div class="clearfix">
-<p class="status" data-addr="/{{ task.id }}"><span class="icon mega-octicon octicon-hourglass"></span><span class="text">...</span>
-<span class="response text" style=font-size:20px;"></span>
-</p>
-<p class="title">{{ task.title }}</p>
+<div class="container ">
+<div class="jumbotron">
+    <h1 style="text-align:center;">{{ title }}</h1>
 </div>
-{% endfor %}
+    <div style="width:100%;" class="text-center" >
 
+        <div class="row">
+            {% for task in tasks %}
+            <div class="col-xs-4">
+                <p class="status" data-addr="/{{ task.id }}">
+                    <span class="icon mega-octicon octicon-hourglass"></span>
+                    <span class="text">...</span>
+                    <span class="response text" style=font-size:20px;"></span>
+                    <span class="title">{{ task.title }}</span>
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted text-center">Please contact <a href="mailto:YOURNAME">me</a> for support</p>
+      </div>
+    </footer>
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script>!window.jQuery && document.write('<script src="/static/js/jquery-1.10.2.min.js"><\/script>')</script>
 <script type="text/javascript">
 $(function() {
     $(".status").each(function() {
@@ -57,7 +118,6 @@ $(function() {
     });
 });
 </script>
-</footer>
-
+<script src="../static/js/bootstrap.min.js"></script>
 </body>
 </html>
