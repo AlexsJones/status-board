@@ -3,4 +3,4 @@ A quick python based status board for endpoints based on [Miracle-board](https:/
 
 It's customised a bit more for my liking and lets you see response times.
 
-<img src="screenshot.png" width="698">
+<img src="screenshot1.png" width="698">
