@@ -13,7 +13,7 @@ class MyServer(Flask):
     def __init__(self, *args, **kwargs):
         super(MyServer,self).__init__(*args, **kwargs)
         self.stored_data = {}
-        
+
         for task in config['tasks']:
             self.stored_data[task["id"]]=[]
 
@@ -66,7 +66,7 @@ def status(task_id):
         task = next(task for task in config['tasks'] if task['id'] == task_id)
     except StopIteration:
         return 'This task does not exist', 404
-    
+
     print("Next task to process is %s of type %s" % (task['id'],task['type']))
 
     j,t = get_handler[task['type']](**task)
@@ -77,5 +77,5 @@ def status(task_id):
         print("Omitting %s response time too high for graphing %s" % (task['id'],t))
     return json.dumps({"status": j, "time": "%sms" % str(t)})
 
- 
-app.run(debug=False, host='0.0.0.0', threaded=True)
+if __name__ == "__main__":
+    app.run(debug=False, host='0.0.0.0', threaded=True)
