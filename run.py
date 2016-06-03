@@ -42,15 +42,22 @@ get_handler = {
 @app.route('/')
 def index():
 
-    title = "Title"
+    title = "response times"
     chart = pygal.Line(stroke=True,
-            width=1200,height=600,explicit_size=True,title=title)
+            width=600,height=300,explicit_size=True,title=title)
 
     for key, value in app.stored_data.iteritems():
         chart.add(key,[float(i) for i in value])
-    
+
+
+    box_chart = pygal.Box(box_mode="pstdev",width=600,height=300,explicit_size=True)
+    box_chart.title = 'response time range'
+
+    for key, value in app.stored_data.iteritems():
+        box_chart.add(key,[float(i) for i in value])
+
     return render_template('index.html', tasks=config['tasks'],
-            title=config['title'],bar_chart=chart)
+            title=config['title'],bar_chart=chart,box_chart=box_chart)
 
 
 @app.route('/<task_id>')

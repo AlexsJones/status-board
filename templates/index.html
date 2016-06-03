@@ -67,7 +67,6 @@
         <h1 style="text-align:center;">{{ title }}</h1>
       </div>
       <div style="width:100%;" class="text-center" >
-
         <div class="row">
           {% for task in tasks %}
           <div class="col-xs-4">
@@ -81,8 +80,16 @@
           {% endfor %}
         </div>
       </div>
-    {{ bar_chart.render().decode("utf-8")|safe }}
+      <div class="row">
+          <div class="col-md-6">
+            {{ bar_chart.render().decode("utf-8")|safe }}
+          </div>
+          <div class="col-md-6">
+            {{ box_chart.render().decode("utf-8")|safe }}
+          </div>
+      </div>
     </div>
+
     <footer class="footer">
       <div class="container">
         <p class="text-muted text-center">Please contact <a href="mailto:YOURNAME">me</a> for support</p>
