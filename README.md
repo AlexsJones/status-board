@@ -1,3 +1,5 @@
+<img src="screenshot1.png" width="800">
+
 # status-board
 A quick python based status board for endpoints ~~based on [Miracle-board](https://github.com/xhacker/miracle-board)~~ 
 (It's become quite different from the project it was based on).
@@ -21,4 +23,3 @@ Edit the config file to point to the sites you care about
 ```
 gunicorn -w 4 -b INTERFACE:5000 run:app --daemon
 ```
-<img src="screenshot1.png" width="800">
