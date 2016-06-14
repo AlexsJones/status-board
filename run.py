@@ -54,6 +54,8 @@ get_handler = {
 def index(environment=None, sm=None):
     if environment:
         app.service_messages[environment] = sm
+        if sm == "Clear":
+            app.service_messages[environment] = None
 
     title = "response times"
     chart = pygal.Line(stroke=True,
