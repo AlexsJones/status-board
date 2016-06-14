@@ -23,3 +23,19 @@ Edit the config file to point to the sites you care about
 ```
 gunicorn -w 4 -b INTERFACE:5000 run:app --daemon
 ```
+
+###Simple service updates
+
+Use the following URL pattern
+
+```
+/Task.id/message
+e.g. /8T/Everything%20Is%20%Fine!
+````
+
+And to clear the message completely
+
+```
+/Task.id/Clear
+/8T/Clear
+```
