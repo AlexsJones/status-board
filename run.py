@@ -1,6 +1,7 @@
 import json
 import subprocess
 from time import time
+
 import pygal
 import requests
 from flask import Flask
@@ -9,19 +10,27 @@ from flask import render_template
 with open('config.json') as f:
     config = json.loads(f.read())
 
+
 class MyServer(Flask):
     def __init__(self, *args, **kwargs):
-        super(MyServer,self).__init__(*args, **kwargs)
+        super(MyServer, self).__init__(*args, **kwargs)
         self.stored_data = {}
+        self.service_messages = {}
 
         for task in config['tasks']:
-            self.stored_data[task["id"]]=[]
+            self.service_messages[task["id"]] = []
+
+        for task in config['tasks']:
+            self.stored_data[task["id"]] = []
+
 
 app = MyServer(__name__)
 
+
 def shell_handler(command, **kwargs):
     return_code = subprocess.call(command, shell=True)
-    return json.dumps(return_code == 0),0
+    return json.dumps(return_code == 0), 0
+
 
 def http_handler(address, **kwargs):
     s = time()
@@ -35,29 +44,33 @@ def http_handler(address, **kwargs):
 
 
 get_handler = {
-        'http': http_handler,
-        'shell': shell_handler,
-        }
+    'http': http_handler,
+    'shell': shell_handler,
+}
+
 
 @app.route('/')
-def index():
+@app.route('/<environment>/<sm>')
+def index(environment=None, sm=None):
+    if environment:
+        app.service_messages[environment] = sm
 
     title = "response times"
     chart = pygal.Line(stroke=True,
-            width=600,height=300,explicit_size=True,title=title)
+                       width=600, height=300, explicit_size=True, title=title)
 
     for key, value in app.stored_data.iteritems():
-        chart.add(key,[float(i) for i in value])
+        chart.add(key, [float(i) for i in value])
 
-
-    box_chart = pygal.Box(box_mode="pstdev",width=600,height=300,explicit_size=True)
+    box_chart = pygal.Box(box_mode="pstdev", width=600, height=300, explicit_size=True)
     box_chart.title = 'response time range'
 
     for key, value in app.stored_data.iteritems():
-        box_chart.add(key,[float(i) for i in value])
+        box_chart.add(key, [float(i) for i in value])
 
     return render_template('index.html', tasks=config['tasks'],
-            title=config['title'],bar_chart=chart,box_chart=box_chart)
+                           title=config['title'], bar_chart=chart, box_chart=box_chart,
+                           service_messages=app.service_messages)
 
 
 @app.route('/<task_id>')
@@ -67,15 +80,16 @@ def status(task_id):
     except StopIteration:
         return 'This task does not exist', 404
 
-    print("Next task to process is %s of type %s" % (task['id'],task['type']))
+    print("Next task to process is %s of type %s" % (task['id'], task['type']))
 
-    j,t = get_handler[task['type']](**task)
+    j, t = get_handler[task['type']](**task)
 
     if float(t) < float(3000):
         app.stored_data[task['id']].append(t)
     else:
-        print("Omitting %s response time too high for graphing %s" % (task['id'],t))
+        print("Omitting %s response time too high for graphing %s" % (task['id'], t))
     return json.dumps({"status": j, "time": "%sms" % str(t)})
 
+
 if __name__ == "__main__":
-    app.run(debug=False, host='0.0.0.0', threaded=True)
+    app.run(debug=True, host='0.0.0.0', threaded=True)
